@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PT-Media — Sound · Light · Code</title>
+<meta name="description" content="Veranstaltungstechnik &amp; App-Entwicklung. Praktische Tools für Live-Event-Techniker. Open Source.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fafaf7;
+    --bg-elev: #f3f1ec;
+    --panel: #ffffff;
+    --panel-2: #f3f1ec;
+    --ink: #0e0e10;
+    --ink-dim: #4a4a4d;
+    --muted: #8a8a8d;
+    --border: #e5e3dc;
+    --border-strong: #d6d4cc;
+    --accent: #ff5b1e;
+    --accent-soft: #ffe3d4;
+    --green: #2e8a5a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--ink); text-decoration: none; }
+  a:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+
+  .container { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
+
+  /* ============ Top nav ============ */
+  .topnav {
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: sticky; top: 0; z-index: 10;
+  }
+  .topnav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 0;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Inter', sans-serif; font-weight: 700; letter-spacing: -0.02em; font-size: 18px;
+  }
+  .brand-mark { width: 32px; height: 22px; display: block; }
+  .brand-wordmark { height: 28px; width: auto; display: block; }
+  .nav-links {
+    display: flex; gap: 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .nav-links a { color: var(--ink-dim); }
+  .nav-links a:hover { color: var(--accent); text-decoration: none; }
+
+  /* ============ Header ============ */
+  header.hero {
+    padding: 96px 0 80px;
+    border-bottom: 1px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 28px;
+  }
+  .hero-mark {
+    width: 220px; height: auto; margin-bottom: 36px; display: block;
+  }
+  .hero-wordmark-img {
+    display: block;
+    width: 100%;
+    max-width: 720px;
+    height: auto;
+    margin-bottom: 28px;
+  }
+  .hero-tagline {
+    font-size: clamp(32px, 4.5vw, 52px);
+    font-weight: 600; letter-spacing: -0.025em; line-height: 1.05;
+    margin-bottom: 28px; max-width: 16ch;
+    color: var(--ink-dim);
+  }
+  .hero-tagline .accent {
+    background: linear-gradient(180deg, transparent 60%, var(--accent-soft) 60%);
+    padding: 0 4px;
+    color: var(--ink);
+  }
+  .lead {
+    font-size: 19px; color: var(--ink-dim); max-width: 56ch;
+    text-wrap: pretty;
+  }
+  .hero-tags {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-top: 36px;
+  }
+  .tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 6px 12px; border: 1px solid var(--border-strong);
+    border-radius: 999px; color: var(--ink-dim); background: var(--panel);
+  }
+
+  /* ============ Apps ============ */
+  .apps-section { padding: 80px 0 96px; }
+  .section-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 36px; gap: 24px; flex-wrap: wrap;
+  }
+  .section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-dim);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-title::before {
+    content: ""; width: 24px; height: 1px; background: var(--accent);
+  }
+  .section-sub { color: var(--muted); font-size: 14px; }
+
+  .apps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px;
+  }
+  .app-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    display: flex; flex-direction: column; gap: 18px;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+  .app-card:hover {
+    border-color: var(--ink);
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px -24px rgba(14,14,16,0.18);
+  }
+  .app-card.coming-soon { opacity: 0.6; background: transparent; border-style: dashed; }
+  .app-card.coming-soon:hover { border-color: var(--border-strong); transform: none; box-shadow: none; }
+
+  .app-card-header {
+    display: flex; align-items: flex-start; gap: 16px;
+  }
+  .app-icon {
+    width: 52px; height: 52px;
+    border-radius: 10px;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    color: var(--ink);
+  }
+  .app-meta { flex: 1; min-width: 0; }
+  .app-name {
+    font-size: 19px; font-weight: 700; letter-spacing: -0.01em;
+    margin-bottom: 6px;
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  }
+  .app-tag {
+    font-size: 11px; color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+  .app-status {
+    display: inline-block; padding: 3px 8px;
+    border-radius: 4px; font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .app-status.stable { background: var(--ink); color: var(--bg); }
+  .app-status.beta { background: var(--accent); color: #fff; }
+  .app-status.soon {
+    background: transparent; color: var(--muted);
+    border: 1px solid var(--border-strong);
+  }
+  .app-desc { font-size: 14.5px; color: var(--ink-dim); flex: 1; }
+  .app-features { list-style: none; font-size: 13.5px; color: var(--ink-dim); }
+  .app-features li {
+    padding-left: 22px; position: relative; margin-bottom: 6px;
+    font-family: 'JetBrains Mono', monospace; font-size: 12.5px;
+  }
+  .app-features li::before {
+    content: "→"; position: absolute; left: 0; color: var(--accent); font-weight: 700;
+  }
+
+  .app-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--ink); color: var(--bg);
+    padding: 10px 18px; border-radius: 8px;
+    font-size: 13px; font-weight: 600; letter-spacing: -0.005em;
+    text-decoration: none; transition: background 0.15s, transform 0.1s, color 0.15s;
+    border: 1px solid var(--ink);
+  }
+  .btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; transform: translateY(-1px); text-decoration: none; }
+  .btn.secondary { background: transparent; color: var(--ink); border: 1px solid var(--border-strong); }
+  .btn.secondary:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .btn.disabled {
+    background: transparent; color: var(--muted);
+    cursor: not-allowed; border: 1px dashed var(--border-strong);
+  }
+  .btn.disabled:hover { background: transparent; color: var(--muted); border-color: var(--border-strong); transform: none; }
+
+  /* ============ About ============ */
+  .about-section { padding: 80px 0; border-top: 1px solid var(--border); background: var(--bg-elev); }
+  .about-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 40px;
+  }
+  .about-block h3 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em;
+    color: var(--accent); margin-bottom: 14px; font-weight: 600;
+  }
+  .about-block p { color: var(--ink-dim); font-size: 15px; }
+
+  /* ============ Services ============ */
+  .services { padding: 80px 0; border-top: 1px solid var(--border); }
+  .services-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 36px;
+  }
+  .service-card {
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 36px; background: var(--panel);
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .service-card .num {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--muted); font-size: 12px; letter-spacing: 0.15em;
+  }
+  .service-card h3 {
+    font-size: 26px; font-weight: 700; letter-spacing: -0.02em;
+  }
+  .service-card p { color: var(--ink-dim); font-size: 15px; }
+  @media (max-width: 720px) { .services-grid { grid-template-columns: 1fr; } }
+
+  /* ============ Footer ============ */
+  footer {
+    padding: 56px 0 40px; color: var(--muted); font-size: 13px;
+    border-top: 1px solid var(--border);
+  }
+  .footer-inner {
+    display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap;
+  }
+  .footer-brand {
+    display: flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 600;
+  }
+  footer a { color: var(--ink-dim); }
+  .footer-meta { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; }
+  .disclaimer { margin-top: 18px; font-size: 11px; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
+</style>
+</head>
+<body>
+
+<!-- ============ SVG mark used inline ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="pt-mark" viewBox="0 0 280 180">
+      <rect x="40" y="30" width="22" height="120" fill="currentColor"/>
+      <path d="M 62 30 L 110 30 Q 150 30 150 65 Q 150 100 110 100 L 62 100 Z" fill="currentColor"/>
+      <path d="M 62 50 L 108 50 Q 130 50 130 65 Q 130 80 108 80 L 62 80 Z" fill="var(--bg)"/>
+      <rect x="150" y="30" width="100" height="22" fill="var(--accent)"/>
+      <rect x="189" y="30" width="22" height="120" fill="currentColor"/>
+    </symbol>
+  </defs>
+</svg>
+
+<nav class="topnav">
+  <div class="container topnav-inner">
+    <a href="#top" class="brand">
+      <img class="brand-wordmark" src="PT-Media-Wordmark-v2.png" alt="PT-Media"/>
+    </a>
+    <div class="nav-links">
+      <a href="#tools">Tools</a>
+      <a href="#about">Über uns</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="container">
+    <div class="hero-eyebrow">Sound · Light · Code</div>
+    <img class="hero-wordmark-img" src="PT-Media-Wordmark-v2.png" alt="PT-Media"/>
+    <h2 class="hero-tagline">Werkzeuge für<br><span class="accent">Live-Event-Technik</span></h2>
+    <p class="lead">
+      PT-Media baut praktische Tools, die im Showbusiness wirklich gebraucht werden —
+      und entwickelt Apps und Systeme rund um Veranstaltungstechnik.
+      Open Source. Frei nutzbar. Aus der Praxis, für die Praxis.
+    </p>
+    <div class="hero-tags">
+      <span class="tag">Veranstaltungstechnik</span>
+      <span class="tag">App Development</span>
+      <span class="tag">Open Source</span>
+      <span class="tag">Operativ</span>
+    </div>
+  </div>
+</header>
+
+<section class="apps-section" id="tools">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-title">Aktuelle Tools</h2>
+      <span class="section-sub">Fertig, dokumentiert, einsatzbereit.</span>
+    </div>
+    <div class="apps-grid">
+
+      <!-- Soundboard -->
+      <div class="app-card">
+        <div class="app-card-header">
+          <div class="app-icon">
+            <!-- Fader / mixer icon -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="6" y1="3" x2="6" y2="21"/>
+              <line x1="12" y1="3" x2="12" y2="21"/>
+              <line x1="18" y1="3" x2="18" y2="21"/>
+              <rect x="3" y="7" width="6" height="4" rx="1" fill="#ff5b1e" stroke="none"/>
+              <rect x="9" y="13" width="6" height="4" rx="1" fill="currentColor" stroke="none"/>
+              <rect x="15" y="9" width="6" height="4" rx="1" fill="currentColor" stroke="none"/>
+            </svg>
+          </div>
+          <div class="app-meta">
+            <div class="app-name">Soundboard <span class="app-status stable">Stable</span></div>
+            <div class="app-tag">v1.0.0 · Windows</div>
+          </div>
+        </div>
+        <p class="app-desc">
+          Pad-basiertes Soundboard mit Trim-Punkten, Fades und Companion-Anbindung —
+          steuerbar per Stream Deck.
+        </p>
+        <ul class="app-features">
+          <li>MP3/WAV mit Drag &amp; Drop</li>
+          <li>Trim Start/End pro Pad</li>
+          <li>Fade In/Out mit Auto-Fade-Ende</li>
+          <li>Performance-Mode für Live-Einsatz</li>
+          <li>Companion-Bridge integriert</li>
+        </ul>
+        <div class="app-actions">
+          <a href="https://github.com/DEIN-USER/soundboard/releases/latest" class="btn">↓ Download</a>
+          <a href="https://github.com/DEIN-USER/soundboard" class="btn secondary">GitHub</a>
+        </div>
+      </div>
+
+      <!-- Companion-Modul -->
+      <div class="app-card">
+        <div class="app-card-header">
+          <div class="app-icon">
+            <!-- Grid / streamdeck icon -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+              <rect x="14" y="3" width="7" height="7" rx="1.5" fill="#ff5b1e" stroke="#ff5b1e"/>
+              <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+              <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+            </svg>
+          </div>
+          <div class="app-meta">
+            <div class="app-name">Companion-Modul <span class="app-status stable">Stable</span></div>
+            <div class="app-tag">v1.0.0 · Cross-Platform</div>
+          </div>
+        </div>
+        <p class="app-desc">
+          Bitfocus-Companion-Modul für das Soundboard. Pads als Drag-and-drop-Presets
+          mit Live-Status und Restzeit auf den Stream-Deck-Buttons.
+        </p>
+        <ul class="app-features">
+          <li>Pad-Presets in Companion</li>
+          <li>Live-Variablen (Name, Restzeit, Status)</li>
+          <li>Visual Feedback: Button leuchtet beim Spielen</li>
+          <li>Trigger / Toggle / Stop pro Pad</li>
+        </ul>
+        <div class="app-actions">
+          <a href="https://github.com/DEIN-USER/companion-module-soundboard-bridge" class="btn">GitHub</a>
+          <a href="https://github.com/DEIN-USER/companion-module-soundboard-bridge#readme" class="btn secondary">Doku</a>
+        </div>
+      </div>
+
+      <!-- Coming soon -->
+      <div class="app-card coming-soon">
+        <div class="app-card-header">
+          <div class="app-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/>
+            </svg>
+          </div>
+          <div class="app-meta">
+            <div class="app-name">Nächstes Tool <span class="app-status soon">Coming Soon</span></div>
+            <div class="app-tag">in Entwicklung</div>
+          </div>
+        </div>
+        <p class="app-desc">
+          Hier landet als nächstes ein neues Tool. Bald mehr.
+        </p>
+        <div class="app-actions">
+          <span class="btn disabled">Demnächst</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="about-section" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-block">
+        <h3>Open Source</h3>
+        <p>
+          Aller Code liegt offen auf GitHub. Du kannst die Tools forken, anpassen,
+          eigene Versionen bauen — die MIT-Lizenz lässt dir freie Hand.
+        </p>
+      </div>
+      <div class="about-block">
+        <h3>Aus der Praxis</h3>
+        <p>
+          Jedes Tool entsteht aus einem konkreten Problem im Live-Event-Alltag.
+          Was nicht gebraucht wird, wird auch nicht gebaut.
+        </p>
+      </div>
+      <div class="about-block">
+        <h3>Feedback willkommen</h3>
+        <p>
+          Bug gefunden? Feature-Wunsch? GitHub-Issues sind offen.
+          Pull Requests werden gelesen und bewertet.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <svg class="brand-mark" viewBox="0 0 280 180" aria-hidden="true" style="color: var(--ink)">
+        <use href="#pt-mark"/>
+      </svg>
+      <span>PT-Media</span>
+    </div>
+    <div class="footer-meta">
+      MIT-Lizenz · <a href="https://github.com/DEIN-USER">GitHub</a>
+    </div>
+  </div>
+  <div class="container">
+    <p class="disclaimer">
+      Keine Garantie. Live einsetzen auf eigenes Risiko. Vorher testen.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
